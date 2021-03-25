@@ -189,6 +189,14 @@ export default class Game {
             //throw error;
         }
 
+        const sysMessage = {
+            message: "La nuit tombe",
+            color: "blue"
+        };
+
+        this.sendMessage(this.players, sysMessage);
+        this.history.addChat(sysMessage.message,"system");
+
         this.history.addHistory("night start", { players: this.players.map(player => player.allToJson() )});
         logger.debug(`Game [${this.id}] start night`, { label: "Game" });
 
@@ -202,7 +210,7 @@ export default class Game {
         this.state = GAME_SATE.day;
 
         this.killVoted(`$name was killed during the night`);
-        this.kill();
+
     }
 
     // Day state
@@ -214,7 +222,14 @@ export default class Game {
             this.end();
             //throw error;
         }
+        const sysMessage = {
+            message: "Le jour viens de se lever",
+            color: "blue"
+        };
 
+        this.sendMessage(this.players, sysMessage);
+        this.history.addChat(sysMessage.message,"system");
+        this.kill();
 
         this.history.addHistory("day start", { players: this.players.map(player => player.allToJson() )});
         logger.debug(`Game [${this.id}] start day`, { label: "Game" });
@@ -224,10 +239,13 @@ export default class Game {
 
         await this.launchVote(this.getAlivePlayer(), this.getAlivePlayer(), this.config.voteTime);
 
-        this.state = GAME_SATE.night;
 
         this.killVoted(`$name was killed by the village`);
         this.kill();
+
+        this.state = GAME_SATE.night;
+
+
     }
 
     // Game ended
@@ -339,7 +357,7 @@ export default class Game {
                 name: player.name,
                 color: "black"
             }
-            this.history.addChat(message, player.name, "all");
+            this.history.addChat(message, "all", player.name);
             this.sendMessage(this.players, dataMessage);
 
         } else {
@@ -349,7 +367,7 @@ export default class Game {
                     name: "Loup-garou",
                     color: "red"
                 };
-                this.history.addChat(message, player.name, "werewolf");
+                this.history.addChat(message,"werewolf", player.name);
                 this.sendMessage(this.getAliveWerewolf(), dataMessage);
             }
         }
