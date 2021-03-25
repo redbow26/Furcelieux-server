@@ -8,7 +8,7 @@ interface IData {
 
 interface IChat {
     date: number; // Date when the line is added
-    name: string; // User who send the message
+    name?: string; // User who send the message
     type: string; // Type of the message send (can be "all", "system", "werewolf")
     message: string; // Message send
 }
@@ -46,7 +46,7 @@ export default class History {
     }
 
     // Add new line in the history
-    addChat(message: string, name: string, type: string): void {
+    addChat(message: string, type: string, name?: string): void {
         const date = Date.now();
         const m: IChat = {
             date,
