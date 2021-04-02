@@ -3,7 +3,7 @@ import Server from "./server/Server";
 
 const server: Server = Server.getInstance();
 
-const PORT: number = +process.env.PORT | 8080;
+const PORT: number = +process.env.PORT || 8080;
 
 server.connect(PORT, {
     cors: {
