@@ -10,6 +10,7 @@ enum GAME_SATE {
     start,
     night,
     day,
+    killCheck,
     end
 }
 
@@ -166,15 +167,15 @@ export default class Game {
             switch (this.state) {
                 case GAME_SATE.night: {
                     await this.night();
-                    this.checkWin();
                     break;
                 }
                 case GAME_SATE.day: {
                     await this.day();
-                    this.checkWin();
                     break;
                 }
             }
+            this.kill();
+            this.checkWin();
         }
         this.end();
     }
@@ -208,9 +209,7 @@ export default class Game {
         }
 
         this.state = GAME_SATE.day;
-
         this.killVoted(`$name was killed during the night`);
-
     }
 
     // Day state
@@ -229,7 +228,6 @@ export default class Game {
 
         this.sendMessage(this.players, sysMessage);
         this.history.addChat(sysMessage.message,"system");
-        this.kill();
 
         this.history.addHistory("day start", { players: this.players.map(player => player.allToJson() )});
         logger.debug(`Game [${this.id}] start day`, { label: "Game" });
@@ -241,7 +239,6 @@ export default class Game {
 
 
         this.killVoted(`$name was killed by the village`);
-        this.kill();
 
         this.state = GAME_SATE.night;
 
