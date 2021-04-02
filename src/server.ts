@@ -3,7 +3,9 @@ import Server from "./server/Server";
 
 const server: Server = Server.getInstance();
 
-server.connect(8080, {
+const PORT: number = +process.env.PORT | 8080;
+
+server.connect(PORT, {
     cors: {
         origin: process.env.CORS_URI,
         methods: ["GET", "POST"]

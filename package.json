@@ -2,9 +2,11 @@
   "name": "server",
   "version": "0.1.0",
   "description": "",
-  "main": "./src/server.ts",
+  "main": "./build/server.js",
   "scripts": {
-    "start": "ts-node ./src/server.ts"
+    "dev": "ts-node ./src/server.ts",
+    "build": "tsc",
+    "start": "NODE_ENV=production node ./build/server.js"
   },
   "keywords": [],
   "author": "Redbow",
